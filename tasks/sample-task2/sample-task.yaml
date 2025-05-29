@@ -1,0 +1,16 @@
+---
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: sample-task
+spec:
+  description: >-
+    Sample task
+  steps:
+    - name: make-repo-public
+      image: quay.io/konflux-ci/release-service-utils:a5072c6da901bc9cf4d767da82e700784c7df981
+      script: |
+        #!/usr/bin/env bash
+        set -eux
+
+        echo "hello world23"
