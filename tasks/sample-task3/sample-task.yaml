@@ -13,4 +13,4 @@ spec:
         #!/usr/bin/env bash
         set -eux
 
-        echo "hello world2345678"
+        echo "hello world23"

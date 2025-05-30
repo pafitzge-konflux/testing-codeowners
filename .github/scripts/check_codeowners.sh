@@ -60,7 +60,7 @@ do
   REGEX="(^|\s)@sample-team($|\s)"
 
   if [[ $(cat $CODEOWNERS) =~ $REGEX ]]; then
-    echo "Error: release-service-maintainers cannot be" \
+    echo "Error: $TEAM_NAME cannot be" \
       "included as a code owner."
     exit 1 
   fi
@@ -70,13 +70,13 @@ do
     REGEX="(^|\s)@$MEMBER($|\s)"
 
     if [[ $(cat $CODEOWNERS) =~ $REGEX ]]; then
-      echo "Error: members of release-service-maintainers" \
+      echo "Error: members of $TEAM_NAME" \
         "cannot be included as a code owner."
       exit 1 
     fi
   done
 
-  echo "$CODEOWNERS exists and does not contain release-service-maintainers" \
+  echo "$CODEOWNERS exists and does not contain $TEAM_NAME" \
     "or any of its members"
 
   cat $CODEOWNERS >> $NEW_CODEOWNERS
