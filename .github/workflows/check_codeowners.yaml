@@ -39,5 +39,5 @@ jobs:
           steps.changed-dirs.outputs.any_changed == 'true'
         run: .github/scripts/check_codeowners.sh
         env:
-          TEST_ITEMS: >-
+          DIRECTORIES: >-
             ${{ steps.changed-dirs.outputs.all_changed_files }}
