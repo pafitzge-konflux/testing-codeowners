@@ -2,6 +2,8 @@
 
 # Usage: ./check_codeowners.sh mydir/tasks/apply-mapping some/other/dir
 
+set -eux
+
 if [ $# -gt 0 ]
 then
   DIRECTORIES=$@
@@ -37,4 +39,10 @@ do
     echo Error: CODEOWNERS file does not exist: $SHORT_DIR
     exit 1
   fi
+
 done
+
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /orgs/konflux-ci/teams/release-service-maintainers/members
