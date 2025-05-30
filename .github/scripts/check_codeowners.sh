@@ -4,13 +4,11 @@
 
 set -eux
 
-if [ $# -gt 0 ]
-then
+if [ $# -gt 0 ]; then
   DIRECTORIES=$@
 fi
 
-if [ -z "${DIRECTORIES}" ]
-then
+if [ -z "${DIRECTORIES}" ]; then
   echo Error: No directories as argument.
   echo Usage:
   echo "$0 [item1] [item2] [...]"
@@ -18,8 +16,7 @@ then
 fi
 
 # check every item is a directory
-for DIR in $DIRECTORIES
-do
+for DIR in $DIRECTORIES; do
   if [[ -d "$DIR" ]]; then
     true
   else
@@ -34,15 +31,44 @@ do
   SHORT_DIR=$(echo $DIR | cut -d '/' -f -2)
   CODEOWNERS=${SHORT_DIR}/CODEOWNERS
 
-  if [ ! -f $CODEOWNERS ]
-  then
+  if [ ! -f $CODEOWNERS ]; then
     echo Error: CODEOWNERS file does not exist: $SHORT_DIR
     exit 1
   fi
 
 done
 
-gh api \
+# This GitHub API call will require a token with the read:org permission
+TEAM_MEMBERS=$(gh api \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  /orgs/pafitzge-konflux/teams/sample-team/members
+  /orgs/pafitzge-konflux/teams/sample-team/members | jq -r .[].login)
+
+for DIR in $DIRECTORIES
+do
+
+  SHORT_DIR=$(echo $DIR | cut -d '/' -f -2)
+  CODEOWNERS=${SHORT_DIR}/CODEOWNERS
+
+  REGEX="(^|\s)@sample-team($|\s)"
+
+  if [[ $(cat $CODEOWNERS) =~ $REGEX ]]; then
+    echo "Error: release-service-maintainers cannot be" \
+      "included as a code owner."
+    exit 1 
+  fi
+
+  for MEMBER in $TEAM_MEMBERS
+  do
+    REGEX="(^|\s)@$MEMBER($|\s)"
+
+    if [[ $(cat $CODEOWNERS) =~ $REGEX ]]; then
+      echo "Error: members of release-service-maintainers" \
+        "cannot be included as a code owner."
+      exit 1 
+    fi
+  done
+
+  echo "$CODEOWNERS exists and does not contain release-service-maintainers" \
+    "or any of its members"
+done
