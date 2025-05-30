@@ -5,4 +5,4 @@
 # the repo. Unless a later match takes precedence,
 # @user will be requested for
 # review when someone opens a pull request.
-/tasks/sample-task2       @Paul123111Alt
+/tasks/sample-task3       @Paul123111Alt
