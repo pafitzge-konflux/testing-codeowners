@@ -20,7 +20,7 @@ for DIR in $DIRECTORIES; do
   if [[ -d "$DIR" ]]; then
     true
   else
-    echo "Error: Not a directory: $ITEM"
+    echo "Error: Not a directory: $DIR"
     exit 1
   fi
 done
@@ -38,11 +38,18 @@ do
 
 done
 
+NEW_CODEOWNERS=$(mktemp)
+
+cat .github/CODEOWNERS > $NEW_CODEOWNERS
+
+ORGANISATION=pafitzge-konflux
+TEAM_NAME=sample-team
+
 # This GitHub API call will require a token with the read:org permission
 TEAM_MEMBERS=$(gh api \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
-  /orgs/pafitzge-konflux/teams/sample-team/members | jq -r .[].login)
+  /orgs/$ORGANISATION/teams/$TEAM_NAME/members | jq -r .[].login)
 
 for DIR in $DIRECTORIES
 do
@@ -71,4 +78,8 @@ do
 
   echo "$CODEOWNERS exists and does not contain release-service-maintainers" \
     "or any of its members"
+
+  cat $CODEOWNERS >> $NEW_CODEOWNERS
 done
+
+cat $NEW_CODEOWNERS > .github/CODEOWNERS
