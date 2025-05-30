@@ -41,3 +41,4 @@ jobs:
         env:
           DIRECTORIES: >-
             ${{ steps.changed-dirs.outputs.all_changed_files }}
+          GH_TOKEN: ${{ github.token }}
