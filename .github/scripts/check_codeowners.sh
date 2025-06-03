@@ -29,7 +29,7 @@ for DIR in $DIRECTORIES
 do
 
   SHORT_DIR=$(echo $DIR | cut -d '/' -f -2)
-  CODEOWNERS=${SHORT_DIR}/CODEOWNERS
+  CODEOWNERS=${SHORT_DIR}/OWNERS
 
   if [ ! -f $CODEOWNERS ]; then
     echo Error: CODEOWNERS file does not exist: $SHORT_DIR
@@ -37,10 +37,6 @@ do
   fi
 
 done
-
-NEW_CODEOWNERS=$(mktemp)
-
-cat .github/CODEOWNERS > $NEW_CODEOWNERS
 
 ORGANISATION=pafitzge-konflux
 TEAM_NAME=sample-team
@@ -79,7 +75,4 @@ do
   echo "$CODEOWNERS exists and does not contain $TEAM_NAME" \
     "or any of its members"
 
-  cat $CODEOWNERS >> $NEW_CODEOWNERS
 done
-
-cat $NEW_CODEOWNERS > .github/CODEOWNERS
