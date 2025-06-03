@@ -7,7 +7,7 @@
 #
 # Requirements:
 # - A GitHub token with permission to read members of a team in
-#   an organisation.
+#   a organisation.
 #
 # Examples of usage:
 # export DIRECTORIES="mydir/tasks/apply-mapping some/other/dir"
@@ -56,7 +56,8 @@ done
 ORGANISATION=pafitzge-konflux
 TEAM_NAME=sample-team
 
-# This GitHub API call requires a token with the read:org permission
+# This GitHub API call requires a token with permission to read
+# members of a team
 TEAM_MEMBERS=$(gh api \
   -H "Accept: application/vnd.github+json" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -78,7 +79,7 @@ do
 
   for MEMBER in $TEAM_MEMBERS
   do
-    REGEX="(^|\s)@$MEMBER($|\s)"
+    REGEX="(^|\s)$MEMBER($|\s)"
 
     if [[ $(cat $OWNERS) =~ $REGEX ]]; then
       echo "Error: members of $TEAM_NAME" \
